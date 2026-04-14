@@ -1,0 +1,172 @@
+.adminContainer {
+  min-height: 100vh;
+  padding: 40px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-family: inherit;
+}
+
+.header {
+  margin-bottom: 40px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 2rem;
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.mainPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #242424;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  border: 1px solid #333;
+}
+
+.card h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.formGroup {
+  display: flex;
+  gap: 15px;
+}
+
+.input {
+  flex: 1;
+  padding: 14px 20px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #121212;
+  color: #fff;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #ff0000;
+}
+
+.button {
+  padding: 0 30px;
+  border-radius: 8px;
+  border: none;
+  background: #ff0000;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.button:hover:not(:disabled) {
+  background: #cc0000;
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.button:disabled {
+  background: #555;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.videoList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.videoItem {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.thumbnail {
+  width: 120px;
+  height: 68px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: #000;
+}
+
+.videoInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.videoTitle {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0 0 5px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.videoChannel {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin: 0;
+}
+
+.deleteBtn {
+  background: transparent;
+  color: #ff4444;
+  border: 1px solid #ff4444;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.deleteBtn:hover {
+  background: #ff4444;
+  color: #fff;
+}
+
+.errorMsg {
+  color: #ff6b6b;
+  background: rgba(255, 0, 0, 0.1);
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  border: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+.successMsg {
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.1);
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  border: 1px solid rgba(74, 222, 128, 0.2);
+}
