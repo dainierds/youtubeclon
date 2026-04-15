@@ -1,0 +1,47 @@
+:root {
+  --background: #0f0f0f;
+  --foreground: #f1f1f1;
+  --accent: #ff0000;
+  --focus-ring: #ffffff;
+  --card-bg: #212121;
+  --sidebar-bg: #0f0f0f;
+  --text-muted: #aaaaaa;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+.tv-root {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* La TV no usa scroll web, se basa en foco */
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Clases utilitarias de foco TV que luego implementaremos por JS o CSS */
+.tv-focusable {
+  border: 3px solid transparent;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  border-radius: 12px;
+}
+
+.tv-focusable.tv-focused {
+  border-color: var(--focus-ring);
+  transform: scale(1.05);
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
