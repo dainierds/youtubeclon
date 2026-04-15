@@ -19,7 +19,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { videoId } = await request.json();
+    const { videoId, isSabado } = await request.json();
     if (!videoId) {
       return NextResponse.json({ message: 'Se requiere ID de video' }, { status: 400 });
     }
@@ -52,13 +52,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Video no encontrado en YouTube' }, { status: 404 });
     }
 
-    // 3. Preparar datos y guardar en Firestore
+    // 3. Preparar datos y guardar en Firestore (incluyendo clasificación de Sábado)
     const snippet = ytData.items[0].snippet;
     const newVideo = {
       youtubeId: videoId,
       title: snippet.title,
       channel: snippet.channelTitle,
       thumbnailUrl: snippet.thumbnails?.maxres?.url || snippet.thumbnails?.high?.url || snippet.thumbnails?.default?.url,
+      isSabado: isSabado === true, // clasificación para Modo Sábado
       addedAt: new Date().toISOString(),
     };
 

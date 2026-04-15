@@ -73,5 +73,5 @@ export function useSpatialNavigation() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [focusedId]);
 
-  return { focusedId };
+  return { focusedId, setFocusedId };
 }
