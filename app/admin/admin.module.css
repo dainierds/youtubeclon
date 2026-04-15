@@ -290,6 +290,36 @@
 }
 .deleteBtn:hover { background: #ff4444; color: #fff; }
 
+/* Sábado toggle button per video */
+.sabadoToggleSmall {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #444;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.sabadoToggleOn {
+  background: linear-gradient(135deg, #6d28d9, #7c3aed);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 0 12px rgba(109, 40, 217, 0.4);
+}
+
+.sabadoToggleOff {
+  background: transparent;
+  color: #666;
+}
+
+.sabadoToggleOff:hover {
+  border-color: #7c3aed;
+  color: #b794f4;
+}
+
 .sabadoBadge {
   background: linear-gradient(135deg, #6d28d9, #7c3aed);
   color: white;

@@ -151,6 +151,22 @@ export default function AdminPage() {
     } catch (e) { console.error(e); }
   };
 
+  const handleToggleSabado = async (id: string, currentValue: boolean) => {
+    // Optimistic update
+    setVideos(prev => prev.map(v => v.id === id ? { ...v, isSabado: !currentValue } : v));
+    try {
+      await fetch('/api/videos', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, isSabado: !currentValue }),
+      });
+    } catch (e) {
+      // Rollback if failed
+      setVideos(prev => prev.map(v => v.id === id ? { ...v, isSabado: currentValue } : v));
+      console.error(e);
+    }
+  };
+
   // Group videos by playlistTitle or channel
   const groupedVideos = useMemo(() => {
     const filtered = videos.filter(v =>
@@ -288,7 +304,13 @@ export default function AdminPage() {
                               <h3 className={styles.videoTitle}>{video.title}</h3>
                               <p className={styles.videoChannel}>{video.channel}</p>
                             </div>
-                            {video.isSabado && <span className={styles.sabadoBadge}>🕊️</span>}
+                            <button
+                              className={`${styles.sabadoToggleSmall} ${video.isSabado ? styles.sabadoToggleOn : styles.sabadoToggleOff}`}
+                              onClick={() => handleToggleSabado(video.id, !!video.isSabado)}
+                              title={video.isSabado ? 'Quitar del Sábado' : 'Marcar para el Sábado'}
+                            >
+                              🕊️ {video.isSabado ? 'Sábado ✓' : 'Sábado'}
+                            </button>
                             <button onClick={() => handleDelete(video.id)} className={styles.deleteBtn}>Eliminar</button>
                           </div>
                         ))}

@@ -206,3 +206,29 @@
   color: #666;
   font-size: 1.2rem;
 }
+
+.searchBackBtn {
+  position: absolute;
+  top: 40px;
+  left: 50px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(5px);
+}
+
+.searchBackBtn:hover {
+  background: rgba(255, 0, 0, 0.7);
+  border-color: transparent;
+  transform: translateX(-4px);
+}
+

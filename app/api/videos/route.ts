@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, addDoc, deleteDoc, doc, query, where } from 'firebase/firestore';
+import { collection, getDocs, addDoc, deleteDoc, doc, query, where, updateDoc } from 'firebase/firestore';
 
 export async function GET() {
   try {
@@ -83,6 +83,20 @@ export async function DELETE(request: Request) {
     await deleteDoc(doc(db, 'videos', id));
 
     return NextResponse.json({ message: 'Video eliminado de la base de datos' });
+  } catch (error: any) {
+    return NextResponse.json({ message: error.message }, { status: 500 });
+  }
+}
+
+export async function PATCH(request: Request) {
+  try {
+    const { id, isSabado } = await request.json();
+    if (!id) {
+      return NextResponse.json({ message: 'ID no proporcionado' }, { status: 400 });
+    }
+    const videoRef = doc(db, 'videos', id);
+    await updateDoc(videoRef, { isSabado: !!isSabado });
+    return NextResponse.json({ message: 'Video actualizado', isSabado: !!isSabado });
   } catch (error: any) {
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
