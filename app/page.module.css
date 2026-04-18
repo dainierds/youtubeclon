@@ -92,13 +92,15 @@
   transform: scale(1.15);
 }
 
+/* Active sidebar icon: just a red accent line, no background fill */
 .iconButtonActive {
-  color: #ff0000 !important;
+  color: #ff4444 !important;
+  border-color: rgba(255, 68, 68, 0.5) !important;
 }
 
 .iconButtonActive[data-focused="true"] {
-  background-color: #ff0000;
-  color: white;
+  background-color: white;
+  color: #ff0000;
 }
 
 .iconButton svg {
@@ -203,21 +205,28 @@
   z-index: 10;
 }
 
+/* Padding-bottom trick: forces 16:9 ratio in ALL browsers including TV WebView */
 .playlistMosaic {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/9;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 */
   overflow: hidden;
-  background: #000;
+  background: #111;
 }
 
+/* All direct children of mosaic must be absolutely positioned */
 .mosaicSingle {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
 .mosaicGrid {
+  position: absolute;
+  inset: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
@@ -229,20 +238,22 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .playlistOverlay {
   position: absolute;
   top: 0;
   right: 0;
-  width: 35%;
-  height: 100%;
-  background: linear-gradient(to left, rgba(0,0,0,0.92) 60%, transparent);
+  bottom: 0;
+  width: 38%;
+  background: linear-gradient(to left, rgba(0,0,0,0.92) 55%, transparent);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 4px;
+  z-index: 2;
 }
 
 .playlistCount {
