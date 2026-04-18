@@ -220,15 +220,24 @@ export default function TVHome() {
                   className={styles.playlistCard}
                   data-focused={focusedId === `pl-${groupName}`}
                   onClick={() => { setSelectedGroup(groupName); setViewMode('playlist-detail'); }}>
-                  {/* Thumbnail mosaic */}
+                  {/* Thumbnail mosaic — img base fuerza la altura natural 16:9 */}
                   <div className={styles.playlistMosaic}>
-                    {thumbs.length === 1 && (
-                      <img src={thumbs[0]} alt="" className={styles.mosaicSingle} />
-                    )}
-                    {thumbs.length >= 2 && (
-                      <div className={styles.mosaicGrid}>
+                    {/* Imagen base: height:auto hace que el browser fuerze la proporción 16:9 */}
+                    <img
+                      src={thumbs[0]}
+                      alt=""
+                      style={{ width: '100%', height: 'auto', display: 'block' }}
+                    />
+                    {/* Si hay 4+ imágenes, mosaico encima con position absolute */}
+                    {thumbs.length >= 4 && (
+                      <div style={{
+                        position: 'absolute', inset: 0,
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gridTemplateRows: '1fr 1fr',
+                      }}>
                         {thumbs.slice(0, 4).map((t, i) => (
-                          <img key={i} src={t} alt="" className={styles.mosaicImg} />
+                          <img key={i} src={t} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                         ))}
                       </div>
                     )}
