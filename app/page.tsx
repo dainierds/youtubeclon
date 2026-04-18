@@ -24,10 +24,16 @@ export default function TVHome() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [sabadoMode, setSabadoMode] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [viewMode, setViewModeState] = useState<ViewMode>('grid');
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
-  const { focusedId } = useSpatialNavigation();
+  const { focusedId, setFocusedId } = useSpatialNavigation();
   const router = useRouter();
+
+  // Wrapper para resetear el foco al cambiar de vista
+  const setViewMode = (mode: ViewMode) => {
+    setViewModeState(mode);
+    setFocusedId(null); // dispara re-foco al primer elemento disponible
+  };
 
   // Filter by sabadoMode first, then by search
   const modeFiltered = sabadoMode ? videos.filter(v => v.isSabado) : videos;
@@ -252,7 +258,10 @@ export default function TVHome() {
                 <h2 className={styles.heroTitle}>{selectedGroup}</h2>
                 <p className={styles.heroMeta}>{selectedGroupVideos.length} videos · {selectedGroupVideos[0]?.channel}</p>
                 <button
+                  id="btn-play-all"
+                  data-focusable="true"
                   className={styles.playAllBtn}
+                  data-focused={focusedId === 'btn-play-all'}
                   onClick={() => playAll(selectedGroupVideos)}>
                   <svg fill="currentColor" width="24" height="24" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                   Reproducir todo

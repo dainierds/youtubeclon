@@ -31,7 +31,11 @@ export function useSpatialNavigation() {
       e.preventDefault();
       
       const current = document.getElementById(focusedId);
-      if (!current) return;
+      if (!current) {
+        // El elemento desapareció (cambio de vista) → enfocar el primero disponible
+        setFocusedId(currentElements[0]?.id || null);
+        return;
+      }
       
       const currRect = current.getBoundingClientRect();
       let bestMatch: HTMLElement | null = null;
