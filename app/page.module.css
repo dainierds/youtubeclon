@@ -1,3 +1,4 @@
+/* ===================== LAYOUT ===================== */
 .tvLayout {
   display: flex;
   height: 100vh;
@@ -13,7 +14,7 @@
   flex-direction: column;
   align-items: center;
   padding: 30px 0;
-  gap: 30px;
+  gap: 24px;
   border-right: 1px solid #222;
   z-index: 50;
   position: relative;
@@ -23,15 +24,17 @@
   flex: 1;
   padding: 40px;
   padding-left: 50px;
-  overflow: hidden; /* Avoid manual scroll */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .header {
   display: flex;
   align-items: center;
   margin-bottom: 30px;
+  flex-shrink: 0;
 }
 
 .mainTitle {
@@ -40,10 +43,9 @@
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
 }
 
-/* Custom Youtube style logo */
 .ytBadge {
   background-color: #ff0000;
   color: white;
@@ -54,6 +56,19 @@
   letter-spacing: -1px;
 }
 
+.breadcrumbBtn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.6rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+.breadcrumbBtn:hover { color: #fff; }
+
+/* ===================== SIDEBAR BUTTONS ===================== */
 .iconButton {
   width: 50px;
   height: 50px;
@@ -63,16 +78,27 @@
   border-radius: 50%;
   border: 3px solid transparent;
   background: transparent;
-  color: #fff;
+  color: #aaa;
   cursor: pointer;
   outline: none;
-  transition: transform 0.2s, background-color 0.2s;
+  transition: transform 0.2s, background-color 0.2s, color 0.2s;
 }
+
+.iconButton:hover { color: #fff; }
 
 .iconButton[data-focused="true"] {
   background-color: white;
   color: black;
   transform: scale(1.15);
+}
+
+.iconButtonActive {
+  color: #ff0000 !important;
+}
+
+.iconButtonActive[data-focused="true"] {
+  background-color: #ff0000;
+  color: white;
 }
 
 .iconButton svg {
@@ -81,21 +107,18 @@
   fill: currentColor;
 }
 
+/* ===================== GRID VIEW ===================== */
 .videoGrid {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 28px;
   padding-bottom: 50px;
-  /* Scroll is handled by Javascript scrolling into view */
   overflow-y: auto;
   scroll-behavior: smooth;
-  scrollbar-width: none; /* Hide scrollbar for clean TV look */
+  scrollbar-width: none;
 }
-
-.videoGrid::-webkit-scrollbar {
-  display: none;
-}
+.videoGrid::-webkit-scrollbar { display: none; }
 
 .videoCard {
   background: transparent;
@@ -133,12 +156,10 @@
   object-fit: cover;
 }
 
-.videoInfo {
-  padding: 0 4px;
-}
+.videoInfo { padding: 0 4px; }
 
 .videoInfo h3 {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   margin: 0 0 5px 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -149,15 +170,255 @@
 
 .videoInfo p {
   color: var(--text-muted);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   margin: 0;
 }
 
-.searchContainer {
-  display: none; /* Removed from header */
+/* ===================== PLAYLISTS VIEW ===================== */
+.playlistGrid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 28px;
+  overflow-y: auto;
+  padding-bottom: 50px;
+  scrollbar-width: none;
+}
+.playlistGrid::-webkit-scrollbar { display: none; }
+
+.playlistCard {
+  background: #1a1a1a;
+  border: 3px solid transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), border-color 0.2s;
+  outline: none;
 }
 
-/* New Search Overlay */
+.playlistCard[data-focused="true"] {
+  border-color: var(--focus-ring);
+  transform: scale(1.06);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+  z-index: 10;
+}
+
+.playlistMosaic {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: #000;
+}
+
+.mosaicSingle {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mosaicGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  width: 100%;
+  height: 100%;
+}
+
+.mosaicImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.playlistOverlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 35%;
+  height: 100%;
+  background: linear-gradient(to left, rgba(0,0,0,0.92) 60%, transparent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.playlistCount {
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  line-height: 1;
+}
+
+.playlistCountLabel {
+  font-size: 0.75rem;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.playlistCardInfo {
+  padding: 14px 16px 16px;
+}
+
+.playlistCardName {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.playlistCardMeta {
+  font-size: 0.85rem;
+  color: #777;
+  margin: 0;
+}
+
+/* ===================== PLAYLIST DETAIL VIEW ===================== */
+.playlistDetail {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.playlistDetailHero {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  flex-shrink: 0;
+}
+
+.heroThumb {
+  width: 260px;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+.heroInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.heroTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.heroMeta {
+  color: #888;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.playAllBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ff0000;
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+  align-self: flex-start;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 4px 20px rgba(255, 0, 0, 0.4);
+}
+
+.playAllBtn:hover {
+  background: #cc0000;
+  transform: scale(1.05);
+}
+
+/* Video list inside playlist detail */
+.playlistVideoList {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  scrollbar-width: none;
+  padding-bottom: 40px;
+}
+.playlistVideoList::-webkit-scrollbar { display: none; }
+
+.playlistVideoItem {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.playlistVideoItem:hover { background: #1a1a1a; }
+
+.playlistVideoItem[data-focused="true"] {
+  background: #1a1a1a;
+  border-color: var(--focus-ring);
+  transform: scale(1.02);
+}
+
+.videoIndex {
+  color: #555;
+  font-size: 1rem;
+  font-weight: 500;
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.listThumb {
+  width: 140px;
+  aspect-ratio: 16/9;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #000;
+}
+
+.listVideoInfo { flex: 1; min-width: 0; }
+
+.listVideoTitle {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0 0 5px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+}
+
+.listVideoChannel {
+  font-size: 0.85rem;
+  color: #777;
+  margin: 0;
+}
+
+/* ===================== SEARCH OVERLAY ===================== */
+.searchContainer { display: none; }
+
 .searchOverlay {
   position: fixed;
   top: 0;
@@ -231,4 +492,3 @@
   border-color: transparent;
   transform: translateX(-4px);
 }
-
