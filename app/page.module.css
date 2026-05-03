@@ -193,7 +193,7 @@
   border: 3px solid transparent;
   border-radius: 16px;
   cursor: pointer;
-  overflow: hidden;
+  /* SIN overflow:hidden — en TV WebView rompe la altura de las imágenes */
   transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), border-color 0.2s;
   outline: none;
 }
@@ -205,13 +205,14 @@
   z-index: 10;
 }
 
-/* La img base con height:auto fuerza la proporción 16:9 automáticamente */
+/* La img base con height:auto + atributos width/height fuerza proporción 16:9 */
 .playlistMosaic {
   position: relative;
   width: 100%;
   overflow: hidden;
+  border-radius: 12px 12px 0 0; /* esquinas superiores redondeadas */
   background: #111;
-  line-height: 0; /* evita espacio debajo del img */
+  line-height: 0;
 }
 
 .mosaicSingle {

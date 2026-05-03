@@ -222,10 +222,12 @@ export default function TVHome() {
                   onClick={() => { setSelectedGroup(groupName); setViewMode('playlist-detail'); }}>
                   {/* Thumbnail mosaic — img base fuerza la altura natural 16:9 */}
                   <div className={styles.playlistMosaic}>
-                    {/* Imagen base: height:auto hace que el browser fuerze la proporción 16:9 */}
+                    {/* Imagen base: width+height attrs dan proporción 16:9 incluso antes de cargar */}
                     <img
                       src={thumbs[0]}
                       alt=""
+                      width="1280"
+                      height="720"
                       style={{ width: '100%', height: 'auto', display: 'block' }}
                     />
                     {/* Si hay 4+ imágenes, mosaico encima con position absolute */}
