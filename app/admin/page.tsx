@@ -1,142 +1,57 @@
-"use client";
+import { createClient } from '@/lib/supabase/server';
 
-import { useState, useEffect } from 'react';
-import styles from './admin.module.css';
+export default async function AdminOverview() {
+  const supabase = await createClient();
 
-export default function AdminPage() {
-  const [url, setUrl] = useState('');
-  const [videos, setVideos] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  // 1. Obtener métricas directo de la base de datos
+  const { count: companiesCount } = await supabase
+    .from('companies')
+    .select('*', { count: 'exact', head: true });
 
-  // En la implementación real esto llamará a /api/videos (Firebase)
-  useEffect(() => {
-    fetchVideos();
-  }, []);
+  const { count: techniciansCount } = await supabase
+    .from('profiles')
+    .select('*', { count: 'exact', head: true })
+    .eq('role', 'technician');
 
-  const fetchVideos = async () => {
-    try {
-      const res = await fetch('/api/videos');
-      const data = await res.json();
-      if (res.ok) {
-        setVideos(data.videos || []);
-      }
-    } catch (e) {
-      console.error('Error fetching videos:', e);
-    }
-  };
-
-  const extractYoutubeId = (url: string) => {
-    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[7].length === 11) ? match[7] : false;
-  };
-
-  const handleAddVideo = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
-
-    const videoId = extractYoutubeId(url);
-    if (!videoId) {
-      setError('Enlace de YouTube no válido.');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const res = await fetch('/api/videos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ videoId }),
-      });
-      
-      const data = await res.json();
-      
-      if (!res.ok) {
-        throw new Error(data.message || 'Error al agregar el video');
-      }
-
-      setSuccess('Video agregado correctamente a la lista blanca.');
-      setUrl('');
-      fetchVideos();
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('¿Seguro que deseas eliminar este video de la lista blanca?')) return;
-    
-    try {
-      const res = await fetch(`/api/videos?id=${id}`, {
-        method: 'DELETE',
-      });
-      if (res.ok) {
-        fetchVideos();
-      } else {
-        const data = await res.json();
-        setError(data.message || 'Error al eliminar el video');
-      }
-    } catch (e) {
-      console.error('Error deleting:', e);
-    }
-  };
+  // Obtener intentos de los últimos 30 días
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  
+  const { count: attemptsCount } = await supabase
+    .from('attempts')
+    .select('*', { count: 'exact', head: true })
+    .gte('completed_at', thirtyDaysAgo.toISOString());
 
   return (
-    <div className={styles.adminContainer}>
-      <header className={styles.header}>
-        <h1>Panel de Administración</h1>
-      </header>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-extrabold text-white">Resumen del Sistema</h1>
+        <p className="text-sm text-slate-400">Métricas clave consolidadas de la plataforma.</p>
+      </div>
 
-      <main className={styles.mainPanel}>
-        <section className={styles.card}>
-          <h2>Agregar a Lista Blanca</h2>
-          <form className={styles.formGroup} onSubmit={handleAddVideo}>
-            <input 
-              type="text" 
-              placeholder="Pega el enlace de YouTube aquí..." 
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              className={styles.input}
-              disabled={loading}
-              required
-            />
-            <button type="submit" className={styles.button} disabled={loading}>
-              {loading ? 'Agregando...' : 'Aprobar Video'}
-            </button>
-          </form>
-          {error && <div className={styles.errorMsg}>{error}</div>}
-          {success && <div className={styles.successMsg}>{success}</div>}
-        </section>
+      {/* Grid de Tarjetas de Métricas */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+        <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Empresas Activas</span>
+          <div className="mt-2 flex items-baseline gap-2">
+            <span className="text-4xl font-extrabold text-white">{companiesCount || 0}</span>
+          </div>
+        </div>
 
-        <section className={styles.card}>
-          <h2>Videos Aprobados</h2>
-          {videos.length === 0 ? (
-            <p style={{ color: '#aaa' }}>No hay videos en la lista blanca todavía.</p>
-          ) : (
-            <div className={styles.videoList}>
-              {videos.map((video) => (
-                <div key={video.id} className={styles.videoItem}>
-                  <img src={video.thumbnailUrl} alt={video.title} className={styles.thumbnail} />
-                  <div className={styles.videoInfo}>
-                    <h3 className={styles.videoTitle}>{video.title}</h3>
-                    <p className={styles.videoChannel}>{video.channel}</p>
-                  </div>
-                  <button onClick={() => handleDelete(video.id)} className={styles.deleteBtn}>
-                    Eliminar
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
-      </main>
+        <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Técnicos Registrados</span>
+          <div className="mt-2 flex items-baseline gap-2">
+            <span className="text-4xl font-extrabold text-white">{techniciansCount || 0}</span>
+          </div>
+        </div>
+
+        <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Intentos (Últimos 30 días)</span>
+          <div className="mt-2 flex items-baseline gap-2">
+            <span className="text-4xl font-extrabold text-white">{attemptsCount || 0}</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
